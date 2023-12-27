@@ -1,0 +1,1580 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 13.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     72072,       1572]
+NotebookOptionsPosition[     68869,       1520]
+NotebookOutlinePosition[     69267,       1536]
+CellTagsIndexPosition[     69224,       1533]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Fusion Lab - PlayGround ", "Section",ExpressionUUID->"93c085a4-cd05-4bd1-a88e-209163a12038"],
+
+Cell["", "Text",ExpressionUUID->"63c079e6-64b9-4ac8-901d-5e313b3162f5"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Basic approach to solving Boltzman PDE static boundary layer problem\
+\>", "Subsection",ExpressionUUID->"2ff76a76-e89a-491a-903c-30bfb8e3a9d1"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Define", " ", "the", " ", "four"}], "-", 
+    RowBox[{
+    "momentum", " ", "and", " ", "the", " ", "electromagnetic", " ", "field", 
+     " ", "tensor"}]}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"p", "=", 
+     RowBox[{"{", 
+      RowBox[{"p0", ",", "p1", ",", "p2", ",", "p3"}], "}"}]}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"Four", "-", 
+     RowBox[{"momentum", ":", 
+      RowBox[{"(", 
+       RowBox[{"Energy", ",", "px", ",", "py", ",", "pz"}], ")"}]}]}], "*)"}],
+    "\n", 
+   RowBox[{
+    RowBox[{"F", "=", 
+     RowBox[{"Array", "[", 
+      RowBox[{"fField", ",", 
+       RowBox[{"{", 
+        RowBox[{"4", ",", "4"}], "}"}]}], "]"}]}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"Electromagnetic", " ", "field", " ", "tensor"}], "*)"}], 
+   "\n"}]}]], "Input",ExpressionUUID->"9585de05-2d43-4912-a121-a5721da7d0ae"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Define", " ", "the", " ", "partial", " ", "derivatives"}], "*)"}],
+   "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"partialX", "=", 
+     RowBox[{"Array", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"D", "[", 
+         RowBox[{
+          RowBox[{"f", "[", 
+           RowBox[{
+           "x0", ",", "x1", ",", "x2", ",", "x3", ",", "p0", ",", "p1", ",", 
+            "p2", ",", "p3"}], "]"}], ",", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "1", "]"}], "]"}]}], "]"}], "&"}], ",", "4"}], 
+      "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"partialP", "=", 
+     RowBox[{"Array", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"D", "[", 
+         RowBox[{
+          RowBox[{"f", "[", 
+           RowBox[{
+           "x0", ",", "x1", ",", "x2", ",", "x3", ",", "p0", ",", "p1", ",", 
+            "p2", ",", "p3"}], "]"}], ",", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "&"}], ",", "4"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   "\[IndentingNewLine]"}]}]], "Input",
+ CellLabel->"In[8]:=",ExpressionUUID->"e790b7af-79f6-4854-9b8e-a40dce5eb790"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Part", "partd", 
+   "\"Part specification \\!\\(\\*RowBox[{\\\"1\\\", \\\"\[LeftDoubleBracket]\
+\\\", \\\"1\\\", \\\"\[RightDoubleBracket]\\\"}]\\) is longer than depth of \
+object.\"", 2, 8, 9, 28960507697887603366, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[8]:=",ExpressionUUID->"d65fd715-eb92-485d-9ac2-f0e5b3bb5575"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Part", "partd", 
+   "\"Part specification \\!\\(\\*RowBox[{\\\"2\\\", \\\"\[LeftDoubleBracket]\
+\\\", \\\"1\\\", \\\"\[RightDoubleBracket]\\\"}]\\) is longer than depth of \
+object.\"", 2, 8, 10, 28960507697887603366, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[8]:=",ExpressionUUID->"9b9dc89c-5a67-45ec-9c0c-da4c870fb3fc"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Part", "partd", 
+   "\"Part specification \\!\\(\\*RowBox[{\\\"3\\\", \\\"\[LeftDoubleBracket]\
+\\\", \\\"1\\\", \\\"\[RightDoubleBracket]\\\"}]\\) is longer than depth of \
+object.\"", 2, 8, 11, 28960507697887603366, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[8]:=",ExpressionUUID->"17df3e77-4bd8-4b0a-b615-54b97173080e"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Part\\\", \\\"::\\\", \
+\\\"partd\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 8, 12, 28960507697887603366, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[8]:=",ExpressionUUID->"e0fb0f86-8ec9-4eb1-b8f5-e3cc647cb1f0"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Part", "partd", 
+   "\"Part specification \\!\\(\\*RowBox[{\\\"1\\\", \\\"\[LeftDoubleBracket]\
+\\\", \\\"2\\\", \\\"\[RightDoubleBracket]\\\"}]\\) is longer than depth of \
+object.\"", 2, 9, 13, 28960507697887603366, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[8]:=",ExpressionUUID->"44720223-8c66-4aef-a554-2764317e8bd4"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Part", "partd", 
+   "\"Part specification \\!\\(\\*RowBox[{\\\"2\\\", \\\"\[LeftDoubleBracket]\
+\\\", \\\"2\\\", \\\"\[RightDoubleBracket]\\\"}]\\) is longer than depth of \
+object.\"", 2, 9, 14, 28960507697887603366, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[8]:=",ExpressionUUID->"1e5173fe-9021-432c-b61f-39e15c56fde1"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "Part", "partd", 
+   "\"Part specification \\!\\(\\*RowBox[{\\\"3\\\", \\\"\[LeftDoubleBracket]\
+\\\", \\\"2\\\", \\\"\[RightDoubleBracket]\\\"}]\\) is longer than depth of \
+object.\"", 2, 9, 15, 28960507697887603366, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[8]:=",ExpressionUUID->"6268de60-3570-4188-b71d-f18d426bfa01"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"Part\\\", \\\"::\\\", \
+\\\"partd\\\"}], \\\"MessageName\\\"]\\) will be suppressed during this \
+calculation.\"", 2, 9, 16, 28960507697887603366, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[8]:=",ExpressionUUID->"b85354c0-9068-4275-aa66-8ab53a26b16a"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Boltzmann", " ", "equation", " ", "for", " ", "static"}], "-", 
+    "boundary", "-", 
+    RowBox[{
+    "layer", " ", "problem", " ", "in", " ", "plasma", " ", "physics"}]}], 
+   "*)"}], "\n", 
+  RowBox[{
+   RowBox[{"boltzmannEquation", "=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"p", ".", "partialX"}], "-", 
+      RowBox[{"q", " ", 
+       RowBox[{"Sum", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"F", "[", 
+           RowBox[{"[", 
+            RowBox[{"mu", ",", "nu"}], "]"}], "]"}], " ", 
+          RowBox[{"p", "[", 
+           RowBox[{"[", "nu", "]"}], "]"}], " ", 
+          RowBox[{"partialP", "[", 
+           RowBox[{"[", "mu", "]"}], "]"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"mu", ",", "1", ",", "4"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"nu", ",", "1", ",", "4"}], "}"}]}], "]"}]}]}], "==", 
+     "0"}]}], ";"}]}]], "Input",
+ CellLabel->"In[10]:=",ExpressionUUID->"06563569-a5d8-47fb-9913-eb0e6ecdcafc"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Graphical Representation of Simple Plasma Closed Field Loop ", \
+"Subsection",ExpressionUUID->"862007dd-4f7f-4e95-83ee-0287e7d1b5ec"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", "Parameters", "*)"}], 
+  RowBox[{
+   RowBox[{
+    RowBox[{"mu0", "=", 
+     RowBox[{"4", " ", "Pi", "*", 
+      RowBox[{"10", "^", 
+       RowBox[{"-", "7"}]}]}]}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"Permeability", " ", "of", " ", "free", " ", "space"}], "*)"}], 
+   "\n", 
+   RowBox[{
+    RowBox[{"current", "=", "1"}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"Current", " ", "in", " ", "the", " ", "loop"}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{"radius", "=", "1"}], ";"}], " ", 
+   RowBox[{"(*", 
+    RowBox[{"Radius", " ", "of", " ", "the", " ", "plasma", " ", "loop"}], 
+    "*)"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+     RowBox[{
+     "Function", " ", "to", " ", "compute", " ", "magnetic", " ", "field", 
+      " ", "using", " ", "Biot"}], "-", 
+     RowBox[{"Savart", " ", "Law"}]}], "*)"}], "\n", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"BiotSavartLaw", "[", "point_", "]"}], ":=", 
+     RowBox[{"Module", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"dl", ",", "rVec", ",", "dB"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"dl", "[", "\[Phi]_", "]"}], ":=", 
+         RowBox[{"R", " ", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"-", 
+             RowBox[{"Sin", "[", "\[Phi]", "]"}]}], ",", 
+            RowBox[{"Cos", "[", "\[Phi]", "]"}], ",", "0"}], "}"}]}]}], ";", 
+        RowBox[{"(*", 
+         RowBox[{"Differential", " ", "length", " ", "element"}], "*)"}], 
+        RowBox[{
+         RowBox[{"rVec", "[", "\[Phi]_", "]"}], ":=", 
+         RowBox[{"point", "-", 
+          RowBox[{"R", " ", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Cos", "[", "\[Phi]", "]"}], ",", 
+             RowBox[{"Sin", "[", "\[Phi]", "]"}], ",", "0"}], "}"}]}]}]}], 
+        ";", 
+        RowBox[{"(*", 
+         RowBox[{"Position", " ", "vector"}], "*)"}], 
+        RowBox[{
+         RowBox[{"dB", "[", "\[Phi]_", "]"}], ":=", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"mu0", " ", "I"}], ")"}], "/", 
+           RowBox[{"(", 
+            RowBox[{"4", " ", "Pi"}], ")"}]}], " ", 
+          RowBox[{
+           RowBox[{"Cross", "[", 
+            RowBox[{
+             RowBox[{"dl", "[", "\[Phi]", "]"}], ",", 
+             RowBox[{"rVec", "[", "\[Phi]", "]"}]}], "]"}], "/", 
+           RowBox[{
+            RowBox[{"Norm", "[", 
+             RowBox[{"rVec", "[", "\[Phi]", "]"}], "]"}], "^", "3"}]}]}]}], 
+        ";", "\[IndentingNewLine]", 
+        RowBox[{"NIntegrate", "[", 
+         RowBox[{
+          RowBox[{"dB", "[", "\[Phi]_", "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"\[Phi]", ",", "0", ",", 
+            RowBox[{"2", " ", "Pi"}]}], "}"}]}], "]"}]}]}], "]"}]}], ";"}], 
+   "\n", "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{
+    "Compute", " ", "and", " ", "visualize", " ", "the", " ", "magnetic", " ",
+      "field", " ", "at", " ", "various", " ", "points"}], "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"points", "=", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"x", ",", "y", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"x", ",", 
+           RowBox[{"-", "2"}], ",", "2", ",", "0.5"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"y", ",", 
+           RowBox[{"-", "2"}], ",", "2", ",", "0.5"}], "}"}]}], "]"}], ",", 
+       "1"}], "]"}]}], ";"}], "\n", 
+   RowBox[{
+    RowBox[{"fields", "=", 
+     RowBox[{"BiotSavartLaw", "/@", "points"}]}], ";"}], "\n", 
+   RowBox[{"Graphics3D", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Arrowheads", "[", "0.02", "]"}], ",", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Arrow", "[", 
+         RowBox[{"Tube", "[", 
+          RowBox[{"{", 
+           RowBox[{"#1", ",", 
+            RowBox[{"#1", "+", 
+             RowBox[{"0.2", " ", "#2"}]}]}], "}"}], "]"}], "]"}], "&"}], "@@@", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"{", 
+         RowBox[{"points", ",", "fields"}], "}"}], "]"}]}]}], "}"}], "]"}], 
+   "\n", "\n"}]}]], "Input",
+ CellLabel->"In[15]:=",ExpressionUUID->"3d3096be-a726-4747-8a79-8611af8f55d1"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NIntegrate", "izero", 
+   "\"Integral and error estimates are 0 on all integration subregions. Try \
+increasing the value of the MinRecursion option. If value of integral may be \
+0, specify a finite value for the AccuracyGoal option.\"", 2, 20, 27, 
+   28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"afcd96a2-2db1-4764-af70-e64d2e5eef77"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NIntegrate", "izero", 
+   "\"Integral and error estimates are 0 on all integration subregions. Try \
+increasing the value of the MinRecursion option. If value of integral may be \
+0, specify a finite value for the AccuracyGoal option.\"", 2, 20, 28, 
+   28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"78b5fb6e-0ee3-4b2c-9136-44f1e7f21989"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NIntegrate", "inumr", 
+   "\"The integrand \\!\\(\\*FractionBox[RowBox[{\\\"\[ImaginaryI]\\\", \\\" \
+\\\", RowBox[{\\\"(\\\", RowBox[{RowBox[{\\\"2.`\\\", \\\" \\\", \
+RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \
+\\\"2\\\"], \\\"+\\\", RowBox[{\\\"2.`\\\", \\\" \\\", RowBox[{\\\"Sin\\\", \
+\\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", SuperscriptBox[RowBox[{\
+\\\"Sin\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \\\"2\\\"]}], \
+\\\")\\\"}]}], RowBox[{\\\"10000000\\\", \\\" \\\", SuperscriptBox[RowBox[{\\\
+\"(\\\", RowBox[{SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"-\\\", \\\"2.`\\\"}], \\\"-\\\", RowBox[{\\\"Cos\\\", \
+\\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\
+\"}], \\\"]\\\"}]}], \\\"]\\\"}], \\\"2\\\"], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", RowBox[{RowBox[{\\\"-\\\", \
+\\\"2.`\\\"}], \\\"-\\\", RowBox[{\\\"Sin\\\", \\\"[\\\", RowBox[{\\\"\
+\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\\\"}]}], \\\
+\"]\\\"}], \\\"2\\\"]}], \\\")\\\"}], RowBox[{\\\"3\\\", \\\"/\\\", \
+\\\"2\\\"}]]}]]\\) has evaluated to non-numerical values for all sampling \
+points in the region with boundaries \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \\\",\\\", \
+\\\"6.283185307179586`\\\"}], \\\"}\\\"}], \\\"}\\\"}]\\).\"", 2, 20, 29, 
+   28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"501794fc-a434-4117-9d00-cab8c5f693e4"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NIntegrate", "inumr", 
+   "\"The integrand \\!\\(\\*FractionBox[RowBox[{\\\"\[ImaginaryI]\\\", \\\" \
+\\\", RowBox[{\\\"(\\\", RowBox[{RowBox[{\\\"2.`\\\", \\\" \\\", \
+RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \
+\\\"2\\\"], \\\"+\\\", RowBox[{\\\"2.`\\\", \\\" \\\", RowBox[{\\\"Sin\\\", \
+\\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", SuperscriptBox[RowBox[{\
+\\\"Sin\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \\\"2\\\"]}], \
+\\\")\\\"}]}], RowBox[{\\\"10000000\\\", \\\" \\\", SuperscriptBox[RowBox[{\\\
+\"(\\\", RowBox[{SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"-\\\", \\\"2.`\\\"}], \\\"-\\\", RowBox[{\\\"Cos\\\", \
+\\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\
+\"}], \\\"]\\\"}]}], \\\"]\\\"}], \\\"2\\\"], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", RowBox[{RowBox[{\\\"-\\\", \
+\\\"2.`\\\"}], \\\"-\\\", RowBox[{\\\"Sin\\\", \\\"[\\\", RowBox[{\\\"\
+\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\\\"}]}], \\\
+\"]\\\"}], \\\"2\\\"]}], \\\")\\\"}], RowBox[{\\\"3\\\", \\\"/\\\", \
+\\\"2\\\"}]]}]]\\) has evaluated to non-numerical values for all sampling \
+points in the region with boundaries \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \\\",\\\", \
+\\\"6.283185307179586`\\\"}], \\\"}\\\"}], \\\"}\\\"}]\\).\"", 2, 20, 30, 
+   28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"e8995e6e-f41e-4082-aeb0-bd2282c93290"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NIntegrate", "inumr", 
+   "\"The integrand \\!\\(\\*FractionBox[RowBox[{\\\"\[ImaginaryI]\\\", \\\" \
+\\\", RowBox[{\\\"(\\\", RowBox[{RowBox[{\\\"2.`\\\", \\\" \\\", \
+RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \
+\\\"2\\\"], \\\"+\\\", RowBox[{\\\"2.`\\\", \\\" \\\", RowBox[{\\\"Sin\\\", \
+\\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", SuperscriptBox[RowBox[{\
+\\\"Sin\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \\\"2\\\"]}], \
+\\\")\\\"}]}], RowBox[{\\\"10000000\\\", \\\" \\\", SuperscriptBox[RowBox[{\\\
+\"(\\\", RowBox[{SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"-\\\", \\\"2.`\\\"}], \\\"-\\\", RowBox[{\\\"Cos\\\", \
+\\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\
+\"}], \\\"]\\\"}]}], \\\"]\\\"}], \\\"2\\\"], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", RowBox[{RowBox[{\\\"-\\\", \
+\\\"2.`\\\"}], \\\"-\\\", RowBox[{\\\"Sin\\\", \\\"[\\\", RowBox[{\\\"\
+\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\\\"}]}], \\\
+\"]\\\"}], \\\"2\\\"]}], \\\")\\\"}], RowBox[{\\\"3\\\", \\\"/\\\", \
+\\\"2\\\"}]]}]]\\) has evaluated to non-numerical values for all sampling \
+points in the region with boundaries \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \\\",\\\", \
+\\\"6.283185307179586`\\\"}], \\\"}\\\"}], \\\"}\\\"}]\\).\"", 2, 20, 31, 
+   28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"4badfc09-4036-467a-812c-60adffe4c94e"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"NIntegrate\\\", \
+\\\"::\\\", \\\"inumr\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
+during this calculation.\"", 2, 20, 32, 28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"1c8489f6-f4ad-4298-9977-856e18be9b65"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NIntegrate", "izero", 
+   "\"Integral and error estimates are 0 on all integration subregions. Try \
+increasing the value of the MinRecursion option. If value of integral may be \
+0, specify a finite value for the AccuracyGoal option.\"", 2, 20, 33, 
+   28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"2d105dbc-cd6a-4a33-ab23-5fc659f6c39b"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"NIntegrate\\\", \
+\\\"::\\\", \\\"izero\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
+during this calculation.\"", 2, 20, 34, 28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"923e662e-1eeb-4e84-9356-f2d28287da04"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NIntegrate", "inumr", 
+   "\"The integrand \\!\\(\\*FractionBox[RowBox[{\\\"\[ImaginaryI]\\\", \\\" \
+\\\", RowBox[{\\\"(\\\", RowBox[{RowBox[{\\\"2.`\\\", \\\" \\\", \
+RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \
+\\\"2\\\"], \\\"+\\\", RowBox[{\\\"2.`\\\", \\\" \\\", RowBox[{\\\"Sin\\\", \
+\\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", SuperscriptBox[RowBox[{\
+\\\"Sin\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \\\"2\\\"]}], \
+\\\")\\\"}]}], RowBox[{\\\"10000000\\\", \\\" \\\", SuperscriptBox[RowBox[{\\\
+\"(\\\", RowBox[{SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"-\\\", \\\"2.`\\\"}], \\\"-\\\", RowBox[{\\\"Cos\\\", \
+\\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\
+\"}], \\\"]\\\"}]}], \\\"]\\\"}], \\\"2\\\"], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", RowBox[{RowBox[{\\\"-\\\", \
+\\\"2.`\\\"}], \\\"-\\\", RowBox[{\\\"Sin\\\", \\\"[\\\", RowBox[{\\\"\
+\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\\\"}]}], \\\
+\"]\\\"}], \\\"2\\\"]}], \\\")\\\"}], RowBox[{\\\"3\\\", \\\"/\\\", \
+\\\"2\\\"}]]}]]\\) has evaluated to non-numerical values for all sampling \
+points in the region with boundaries \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \\\",\\\", \
+\\\"6.283185307179586`\\\"}], \\\"}\\\"}], \\\"}\\\"}]\\).\"", 2, 21, 35, 
+   28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"c96b03b3-6e1a-492d-b5c3-be918e08c565"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NIntegrate", "inumr", 
+   "\"The integrand \\!\\(\\*FractionBox[RowBox[{\\\"\[ImaginaryI]\\\", \\\" \
+\\\", RowBox[{\\\"(\\\", RowBox[{RowBox[{\\\"2.`\\\", \\\" \\\", \
+RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \
+\\\"2\\\"], \\\"+\\\", RowBox[{\\\"1.5`\\\", \\\" \\\", RowBox[{\\\"Sin\\\", \
+\\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", SuperscriptBox[RowBox[{\
+\\\"Sin\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \\\"2\\\"]}], \
+\\\")\\\"}]}], RowBox[{\\\"10000000\\\", \\\" \\\", SuperscriptBox[RowBox[{\\\
+\"(\\\", RowBox[{SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"-\\\", \\\"2.`\\\"}], \\\"-\\\", RowBox[{\\\"Cos\\\", \
+\\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\
+\"}], \\\"]\\\"}]}], \\\"]\\\"}], \\\"2\\\"], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", RowBox[{RowBox[{\\\"-\\\", \
+\\\"1.5`\\\"}], \\\"-\\\", RowBox[{\\\"Sin\\\", \\\"[\\\", RowBox[{\\\"\
+\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\\\"}]}], \\\
+\"]\\\"}], \\\"2\\\"]}], \\\")\\\"}], RowBox[{\\\"3\\\", \\\"/\\\", \
+\\\"2\\\"}]]}]]\\) has evaluated to non-numerical values for all sampling \
+points in the region with boundaries \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \\\",\\\", \
+\\\"6.283185307179586`\\\"}], \\\"}\\\"}], \\\"}\\\"}]\\).\"", 2, 21, 36, 
+   28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"acb6925b-5356-47e7-8063-752a7b8c0fdf"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "NIntegrate", "inumr", 
+   "\"The integrand \\!\\(\\*FractionBox[RowBox[{\\\"\[ImaginaryI]\\\", \\\" \
+\\\", RowBox[{\\\"(\\\", RowBox[{RowBox[{\\\"2.`\\\", \\\" \\\", \
+RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Cos\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \
+\\\"2\\\"], \\\"+\\\", RowBox[{\\\"1.`\\\", \\\" \\\", RowBox[{\\\"Sin\\\", \
+\\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}]}], \\\"+\\\", SuperscriptBox[RowBox[{\
+\\\"Sin\\\", \\\"[\\\", \\\"\[Phi]_\\\", \\\"]\\\"}], \\\"2\\\"]}], \
+\\\")\\\"}]}], RowBox[{\\\"10000000\\\", \\\" \\\", SuperscriptBox[RowBox[{\\\
+\"(\\\", RowBox[{SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", \
+RowBox[{RowBox[{\\\"-\\\", \\\"2.`\\\"}], \\\"-\\\", RowBox[{\\\"Cos\\\", \
+\\\"[\\\", RowBox[{\\\"\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\
+\"}], \\\"]\\\"}]}], \\\"]\\\"}], \\\"2\\\"], \\\"+\\\", \
+SuperscriptBox[RowBox[{\\\"Abs\\\", \\\"[\\\", RowBox[{RowBox[{\\\"-\\\", \
+\\\"1.`\\\"}], \\\"-\\\", RowBox[{\\\"Sin\\\", \\\"[\\\", RowBox[{\\\"\
+\[LeftSkeleton]\\\", \\\"1\\\", \\\"\[RightSkeleton]\\\"}], \\\"]\\\"}]}], \\\
+\"]\\\"}], \\\"2\\\"]}], \\\")\\\"}], RowBox[{\\\"3\\\", \\\"/\\\", \
+\\\"2\\\"}]]}]]\\) has evaluated to non-numerical values for all sampling \
+points in the region with boundaries \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"{\\\", RowBox[{\\\"0\\\", \\\",\\\", \
+\\\"6.283185307179586`\\\"}], \\\"}\\\"}], \\\"}\\\"}]\\).\"", 2, 21, 37, 
+   28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"4693f786-a901-4423-bbcb-5aca0eaeb783"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "General", "stop", 
+   "\"Further output of \\!\\(\\*StyleBox[RowBox[{\\\"NIntegrate\\\", \
+\\\"::\\\", \\\"inumr\\\"}], \\\"MessageName\\\"]\\) will be suppressed \
+during this calculation.\"", 2, 21, 38, 28960991445362313446, "Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellLabel->
+  "During evaluation of \
+In[15]:=",ExpressionUUID->"1ad64368-e2ff-4736-8b84-1c5fa3fb8e46"],
+
+Cell[BoxData[
+ Graphics3DBox[
+  {Arrowheads[0.02], 
+   Arrow3DBox[
+    TubeBox[{{-2., -2., 0}, {-2., -2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (2. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         2. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-2., -1.5, 0}, {-2., -1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (2. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-2., -1., 0}, {-2., -1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (2. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-2., -0.5, 0}, {-2., -0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (2. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         0.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-2., 0., 0}, {-2., 0., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + 2. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-2., 0.5, 0}, {-2., 0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (2. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 0.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-2., 1., 0}, {-2., 1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (2. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-2., 1.5, 0}, {-2., 1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (2. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-2., 2., 0}, {-2., 2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (2. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 2. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1.5, -2., 0}, {-1.5, -2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         2. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1.5, -1.5, 0}, {-1.5, -1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1.5, -1., 0}, {-1.5, -1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1.5, -0.5, 0}, {-1.5, -0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         0.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1.5, 0., 0}, {-1.5, 0., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + 1.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1.5, 0.5, 0}, {-1.5, 0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 0.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1.5, 1., 0}, {-1.5, 1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1.5, 1.5, 0}, {-1.5, 1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1.5, 2., 0}, {-1.5, 2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 2. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1., -2., 0}, {-1., -2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         2. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1., -1.5, 0}, {-1., -1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1., -1., 0}, {-1., -1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1., -0.5, 0}, {-1., -0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         0.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1., 0., 0}, {-1., 0., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + 1. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1., 0.5, 0}, {-1., 0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 0.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1., 1., 0}, {-1., 1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1., 1.5, 0}, {-1., 1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-1., 2., 0}, {-1., 2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (1. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 2. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-0.5, -2., 0}, {-0.5, -2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         2. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-0.5, -1.5, 0}, {-0.5, -1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-0.5, -1., 0}, {-0.5, -1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-0.5, -0.5, 0}, {-0.5, -0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         0.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-0.5, 0., 0}, {-0.5, 0., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + 0.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-0.5, 0.5, 0}, {-0.5, 0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 0.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-0.5, 1., 0}, {-0.5, 1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-0.5, 1.5, 0}, {-0.5, 1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{-0.5, 2., 0}, {-0.5, 2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[-0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 2. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0., -2., 0}, {
+     0., -2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         2. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0., -1.5, 0}, {
+     0., -1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0., -1., 0}, {
+     0., -1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0., -0.5, 0}, {
+     0., -0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         0.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0., 0., 0}, {
+     0., 0., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0., 0.5, 0}, {
+     0., 0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 
+         0.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0., 1., 0}, {
+     0., 1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 
+         1. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0., 1.5, 0}, {
+     0., 1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 
+         1.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0., 2., 0}, {
+     0., 2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. + Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 
+         2. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0.5, -2., 0}, {
+     0.5, -2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-0.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         2. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0.5, -1.5, 0}, {
+     0.5, -1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-0.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0.5, -1., 0}, {
+     0.5, -1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-0.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0.5, -0.5, 0}, {
+     0.5, -0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-0.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         0.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0.5, 0., 0}, {
+     0.5, 0., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. - 0.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0.5, 0.5, 0}, {
+     0.5, 0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-0.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 0.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0.5, 1., 0}, {
+     0.5, 1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-0.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0.5, 1.5, 0}, {
+     0.5, 1.5, 0.2 
+      NIntegrate[
+       Complex[
+         0, Rational[1, 10000000]] (
+          Abs[0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-0.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{0.5, 2., 0}, {
+     0.5, 2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[0.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-0.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 2. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1., -2., 0}, {
+     1., -2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (-Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         2. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1., -1.5, 0}, {
+     1., -1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (-Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1., -1., 0}, {
+     1., -1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (-Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1., -0.5, 0}, {
+     1., -0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (-Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         0.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1., 0., 0}, {
+     1., 0., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. - 1. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1., 0.5, 0}, {
+     1., 0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (-Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 0.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1., 1., 0}, {
+     1., 1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (-Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1., 1.5, 0}, {
+     1., 1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (-Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1., 2., 0}, {
+     1., 2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (-Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 2. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1.5, -2., 0}, {
+     1.5, -2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-1.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         2. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1.5, -1.5, 0}, {
+     1.5, -1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-1.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1.5, -1., 0}, {
+     1.5, -1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-1.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1.5, -0.5, 0}, {
+     1.5, -0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-1.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         0.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1.5, 0., 0}, {
+     1.5, 0., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. - 1.5 Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1.5, 0.5, 0}, {
+     1.5, 0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-1.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 0.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1.5, 1., 0}, {
+     1.5, 1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-1.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1.5, 1.5, 0}, {
+     1.5, 1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-1.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{1.5, 2., 0}, {
+     1.5, 2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[1.5 - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-1.5) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 2. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{2., -2., 0}, {
+     2., -2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-2.) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         2. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{2., -1.5, 0}, {
+     2., -1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-2.) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{2., -1., 0}, {
+     2., -1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-2.) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         1. Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{2., -0.5, 0}, {
+     2., -0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[-0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-2.) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         0.5 Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{2., 0., 0}, {
+     2., 0., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] (0. - 2. Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{2., 0.5, 0}, {
+     2., 0.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[0.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-2.) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 0.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{2., 1., 0}, {
+     2., 1., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-2.) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{2., 1.5, 0}, {
+     2., 1.5, 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[1.5 - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-2.) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 1.5 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]], 
+   Arrow3DBox[
+    TubeBox[{{2., 2., 0}, {
+     2., 2., 0.2 
+      NIntegrate[
+       Complex[0, Rational[1, 10000000]] (
+          Abs[2. - Cos[Pattern[$CellContext`\[Phi], Blank[]]]]^2 + 
+          Abs[2. - Sin[Pattern[$CellContext`\[Phi], Blank[]]]]^2)^
+         Rational[-3, 2] ((-2.) Cos[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Cos[Pattern[$CellContext`\[Phi], Blank[]]]^2 - 2. 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]] + 
+         Sin[Pattern[$CellContext`\[Phi], Blank[]]]^2), {$CellContext`\[Phi], 
+         0, 2 Pi}]}}]]}]], "Output",
+ CellLabel->"Out[21]=",ExpressionUUID->"948ddc0d-5229-4923-93e7-7c55c5a25012"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1284, 1265},
+WindowMargins->{{Automatic, 83}, {Automatic, 0}},
+FrontEndVersion->"13.2 for Mac OS X ARM (64-bit) (November 18, 2022)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"5940112b-1770-4214-b5eb-06544334d814"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 98, 0, 67, "Section",ExpressionUUID->"93c085a4-cd05-4bd1-a88e-209163a12038"],
+Cell[681, 24, 71, 0, 35, "Text",ExpressionUUID->"63c079e6-64b9-4ac8-901d-5e313b3162f5"],
+Cell[CellGroupData[{
+Cell[777, 28, 153, 2, 54, "Subsection",ExpressionUUID->"2ff76a76-e89a-491a-903c-30bfb8e3a9d1"],
+Cell[933, 32, 927, 27, 94, "Input",ExpressionUUID->"9585de05-2d43-4912-a121-a5721da7d0ae"],
+Cell[CellGroupData[{
+Cell[1885, 63, 1186, 35, 115, "Input",ExpressionUUID->"e790b7af-79f6-4854-9b8e-a40dce5eb790"],
+Cell[3074, 100, 403, 9, 28, "Message",ExpressionUUID->"d65fd715-eb92-485d-9ac2-f0e5b3bb5575"],
+Cell[3480, 111, 404, 9, 28, "Message",ExpressionUUID->"9b9dc89c-5a67-45ec-9c0c-da4c870fb3fc"],
+Cell[3887, 122, 404, 9, 28, "Message",ExpressionUUID->"17df3e77-4bd8-4b0a-b615-54b97173080e"],
+Cell[4294, 133, 406, 9, 28, "Message",ExpressionUUID->"e0fb0f86-8ec9-4eb1-b8f5-e3cc647cb1f0"],
+Cell[4703, 144, 404, 9, 28, "Message",ExpressionUUID->"44720223-8c66-4aef-a554-2764317e8bd4"],
+Cell[5110, 155, 404, 9, 28, "Message",ExpressionUUID->"1e5173fe-9021-432c-b61f-39e15c56fde1"],
+Cell[5517, 166, 404, 9, 28, "Message",ExpressionUUID->"6268de60-3570-4188-b71d-f18d426bfa01"],
+Cell[5924, 177, 406, 9, 28, "Message",ExpressionUUID->"b85354c0-9068-4275-aa66-8ab53a26b16a"]
+}, Open  ]],
+Cell[6345, 189, 1036, 30, 52, "Input",ExpressionUUID->"06563569-a5d8-47fb-9913-eb0e6ecdcafc"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7418, 224, 139, 1, 54, "Subsection",ExpressionUUID->"862007dd-4f7f-4e95-83ee-0287e7d1b5ec"],
+Cell[CellGroupData[{
+Cell[7582, 229, 4273, 119, 346, "Input",ExpressionUUID->"3d3096be-a726-4747-8a79-8611af8f55d1"],
+Cell[11858, 350, 463, 10, 28, "Message",ExpressionUUID->"afcd96a2-2db1-4764-af70-e64d2e5eef77"],
+Cell[12324, 362, 463, 10, 28, "Message",ExpressionUUID->"78b5fb6e-0ee3-4b2c-9136-44f1e7f21989"],
+Cell[12790, 374, 1689, 27, 53, "Message",ExpressionUUID->"501794fc-a434-4117-9d00-cab8c5f693e4"],
+Cell[14482, 403, 1689, 27, 53, "Message",ExpressionUUID->"e8995e6e-f41e-4082-aeb0-bd2282c93290"],
+Cell[16174, 432, 1689, 27, 53, "Message",ExpressionUUID->"4badfc09-4036-467a-812c-60adffe4c94e"],
+Cell[17866, 461, 414, 9, 28, "Message",ExpressionUUID->"1c8489f6-f4ad-4298-9977-856e18be9b65"],
+Cell[18283, 472, 463, 10, 28, "Message",ExpressionUUID->"2d105dbc-cd6a-4a33-ab23-5fc659f6c39b"],
+Cell[18749, 484, 414, 9, 28, "Message",ExpressionUUID->"923e662e-1eeb-4e84-9356-f2d28287da04"],
+Cell[19166, 495, 1689, 27, 53, "Message",ExpressionUUID->"c96b03b3-6e1a-492d-b5c3-be918e08c565"],
+Cell[20858, 524, 1691, 27, 53, "Message",ExpressionUUID->"acb6925b-5356-47e7-8063-752a7b8c0fdf"],
+Cell[22552, 553, 1689, 27, 53, "Message",ExpressionUUID->"4693f786-a901-4423-bbcb-5aca0eaeb783"],
+Cell[24244, 582, 414, 9, 28, "Message",ExpressionUUID->"1ad64368-e2ff-4736-8b84-1c5fa3fb8e46"],
+Cell[24661, 593, 44168, 922, 408, "Output",ExpressionUUID->"948ddc0d-5229-4923-93e7-7c55c5a25012"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
